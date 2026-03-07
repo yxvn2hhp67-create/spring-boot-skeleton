@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Products</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Products</h1>
+    <div class="page-actions">
+      <a th:href="@{/cart}" class="btn btn-secondary">View cart</a>
+      <a th:href="@{/products/new}" class="btn">Create new product</a>
+    </div>
+    <p th:if="${message}" class="message" th:text="${message}"></p>
+    <p th:if="${error}" class="error" th:text="${error}"></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="product : ${products}">
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.description}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.quantity}"></td>
+            <td>
+              <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-small">Add to cart</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

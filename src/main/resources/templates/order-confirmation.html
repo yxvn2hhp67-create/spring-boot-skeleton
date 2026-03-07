@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Order Confirmation</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Order placed</h1>
+    <p th:if="${message}" class="message" th:text="${message}"></p>
+    <p th:if="${orderId}" class="order-id">Order number: <strong th:text="${orderId}"></strong></p>
+    <div class="page-actions">
+      <a th:href="@{/products}" class="btn">Continue shopping</a>
+      <a th:href="@{/cart}" class="btn btn-secondary">View cart</a>
+    </div>
+  </div>
+</body>
+</html>
