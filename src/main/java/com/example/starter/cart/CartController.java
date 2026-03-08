@@ -104,27 +104,30 @@ public class CartController {
 
   @PostMapping("/place-order")
   @Transactional
-  public String placeOrder(
-      @ModelAttribute("cart") Cart cart,
-      Model model,
-      RedirectAttributes redirectAttributes) {
+  public String placeOrder(@ModelAttribute("cart") Cart cart, Model model,RedirectAttributes redirectAttributes) {
+
     if (cart.isEmpty()) {
       redirectAttributes.addFlashAttribute("error", "Your cart is empty.");
       return "redirect:/cart";
     }
+
     List<CartEntry> entries = buildCartEntries(cart);
     List<String> errors = new ArrayList<>();
+
     for (CartEntry e : entries) {
       if (e.getProduct().getQuantity().compareTo(BigInteger.valueOf(e.getQuantity())) < 0) {
         errors.add(e.getProduct().getName() + ": not enough stock (available: " + e.getProduct().getQuantity() + ").");
       }
     }
+
     if (!errors.isEmpty()) {
       model.addAttribute("cartEntries", entries);
       model.addAttribute("errors", errors);
       return "cart";
     }
+
     Order order = Order.builder().build();
+
     for (CartEntry e : entries) {
       OrderItem item = OrderItem.builder()
           .order(order)
@@ -137,10 +140,13 @@ public class CartController {
       p.setQuantity(p.getQuantity().subtract(BigInteger.valueOf(e.getQuantity())));
       productRepository.save(p);
     }
+
     order = orderRepository.save(order);
     cart.clear();
+
     redirectAttributes.addFlashAttribute("orderId", order.getId());
     redirectAttributes.addFlashAttribute("message", "Order #" + order.getId() + " placed successfully.");
+
     return "redirect:/cart/confirmation";
   }
 
